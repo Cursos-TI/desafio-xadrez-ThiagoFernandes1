@@ -1,101 +1,55 @@
 #include <stdio.h>
 
-#define TAMANHO_TABULEIRO 8
-
-// Função para exibir o tabuleiro
-void exibirTabuleiro(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
-    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
-        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
-            printf("%c ", tabuleiro[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
+#define BISPO_MOV 5
+#define TORRE_MOV 5
+#define RAINHA_MOV 8
 
 // Função recursiva para movimentação do Bispo
-void moverBispo(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y, int dx, int dy) {
-    if (x < 0 || x >= TAMANHO_TABULEIRO || y < 0 || y >= TAMANHO_TABULEIRO) return;
-    tabuleiro[x][y] = 'B';
-    moverBispo(tabuleiro, x + dx, y + dy, dx, dy);
+void mover_bispo(int mov) {
+    if (mov == 0) return;
+    printf("Cima-Direita\n");
+    mover_bispo(mov - 1);
 }
 
-// Movimentação da Torre
-void moverTorre(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
-    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
-        tabuleiro[x][i] = 'T';
-        tabuleiro[i][y] = 'T';
+// Função recursiva para movimentação da Torre
+void mover_torre(int mov) {
+    if (mov == 0) return;
+    printf("Direita\n");
+    mover_torre(mov - 1);
+}
+
+// Função recursiva para movimentação da Rainha
+void mover_rainha(int mov) {
+    if (mov == 0) return;
+    printf("Esquerda\n");
+    mover_rainha(mov - 1);
+}
+
+// Movimentação do Cavalo utilizando múltiplas variáveis e loops
+void mover_cavalo() {
+    int i = 0, j = 0;
+    while (i < 2) { // Duas casas para cima
+        printf("Cima\n");
+        i++;
     }
-}
-
-// Movimentação da Rainha
-void moverRainha(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
-    moverTorre(tabuleiro, x, y);
-    moverBispo(tabuleiro, x, y, -1, -1);
-    moverBispo(tabuleiro, x, y, -1, 1);
-    moverBispo(tabuleiro, x, y, 1, -1);
-    moverBispo(tabuleiro, x, y, 1, 1);
-}
-
-// Movimentação do Cavalo
-void moverCavalo(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
-    int movimentos[8][2] = {
-        {-2, -1}, {-2, 1}, {2, -1}, {2, 1},
-        {-1, -2}, {-1, 2}, {1, -2}, {1, 2}
-    };
-    for (int i = 0; i < 8; i++) {
-        int nx = x + movimentos[i][0];
-        int ny = y + movimentos[i][1];
-        if (nx >= 0 && nx < TAMANHO_TABULEIRO && ny >= 0 && ny < TAMANHO_TABULEIRO) {
-            tabuleiro[nx][ny] = 'C';
-        }
-    }
+    do { // Uma casa para a direita
+        printf("Direita\n");
+        j++;
+    } while (j < 1);
 }
 
 int main() {
-    char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
+    printf("Movimentacao do Bispo:\n");
+    mover_bispo(BISPO_MOV);
     
-    // Inicializando tabuleiro vazio
-    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
-        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
-            tabuleiro[i][j] = '.';
-        }
-    }
+    printf("\nMovimentacao da Torre:\n");
+    mover_torre(TORRE_MOV);
     
-    // Testando a movimentação
-    printf("Movimentação do Bispo:\n");
-    moverBispo(tabuleiro, 4, 4, -1, -1);
-    moverBispo(tabuleiro, 4, 4, -1, 1);
-    moverBispo(tabuleiro, 4, 4, 1, -1);
-    moverBispo(tabuleiro, 4, 4, 1, 1);
-    exibirTabuleiro(tabuleiro);
+    printf("\nMovimentacao da Rainha:\n");
+    mover_rainha(RAINHA_MOV);
     
-    // Resetando tabuleiro
-    for (int i = 0; i < TAMANHO_TABULEIRO; i++)
-        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
-            tabuleiro[i][j] = '.';
-    
-    printf("Movimentação da Torre:\n");
-    moverTorre(tabuleiro, 4, 4);
-    exibirTabuleiro(tabuleiro);
-    
-    // Resetando tabuleiro
-    for (int i = 0; i < TAMANHO_TABULEIRO; i++)
-        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
-            tabuleiro[i][j] = '.';
-    
-    printf("Movimentação da Rainha:\n");
-    moverRainha(tabuleiro, 4, 4);
-    exibirTabuleiro(tabuleiro);
-    
-    // Resetando tabuleiro
-    for (int i = 0; i < TAMANHO_TABULEIRO; i++)
-        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
-            tabuleiro[i][j] = '.';
-    
-    printf("Movimentação do Cavalo:\n");
-    moverCavalo(tabuleiro, 4, 4);
-    exibirTabuleiro(tabuleiro);
+    printf("\nMovimentacao do Cavalo:\n");
+    mover_cavalo();
     
     return 0;
 }
