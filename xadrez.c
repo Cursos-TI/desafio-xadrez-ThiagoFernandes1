@@ -1,32 +1,101 @@
 #include <stdio.h>
 
-// Desafio de Xadrez - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de movimentação das peças de xadrez.
-// O objetivo é utilizar estruturas de repetição e funções para determinar os limites de movimentação dentro do jogo.
+#define TAMANHO_TABULEIRO 8
+
+// Função para exibir o tabuleiro
+void exibirTabuleiro(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            printf("%c ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+// Função recursiva para movimentação do Bispo
+void moverBispo(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y, int dx, int dy) {
+    if (x < 0 || x >= TAMANHO_TABULEIRO || y < 0 || y >= TAMANHO_TABULEIRO) return;
+    tabuleiro[x][y] = 'B';
+    moverBispo(tabuleiro, x + dx, y + dy, dx, dy);
+}
+
+// Movimentação da Torre
+void moverTorre(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        tabuleiro[x][i] = 'T';
+        tabuleiro[i][y] = 'T';
+    }
+}
+
+// Movimentação da Rainha
+void moverRainha(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
+    moverTorre(tabuleiro, x, y);
+    moverBispo(tabuleiro, x, y, -1, -1);
+    moverBispo(tabuleiro, x, y, -1, 1);
+    moverBispo(tabuleiro, x, y, 1, -1);
+    moverBispo(tabuleiro, x, y, 1, 1);
+}
+
+// Movimentação do Cavalo
+void moverCavalo(char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
+    int movimentos[8][2] = {
+        {-2, -1}, {-2, 1}, {2, -1}, {2, 1},
+        {-1, -2}, {-1, 2}, {1, -2}, {1, 2}
+    };
+    for (int i = 0; i < 8; i++) {
+        int nx = x + movimentos[i][0];
+        int ny = y + movimentos[i][1];
+        if (nx >= 0 && nx < TAMANHO_TABULEIRO && ny >= 0 && ny < TAMANHO_TABULEIRO) {
+            tabuleiro[nx][ny] = 'C';
+        }
+    }
+}
 
 int main() {
-    // Nível Novato - Movimentação das Peças
-    // Sugestão: Declare variáveis constantes para representar o número de casas que cada peça pode se mover.
-
-    // Implementação de Movimentação do Bispo
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação do Bispo em diagonal.
-
-    // Implementação de Movimentação da Torre
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação da Torre para a direita.
-
-    // Implementação de Movimentação da Rainha
-    // Sugestão: Utilize uma estrutura de repetição para simular a movimentação da Rainha para a esquerda.
-
-    // Nível Aventureiro - Movimentação do Cavalo
-    // Sugestão: Utilize loops aninhados para simular a movimentação do Cavalo em L.
-    // Um loop pode representar a movimentação horizontal e outro vertical.
-
-    // Nível Mestre - Funções Recursivas e Loops Aninhados
-    // Sugestão: Substitua as movimentações das peças por funções recursivas.
-    // Exemplo: Crie uma função recursiva para o movimento do Bispo.
-
-    // Sugestão: Implemente a movimentação do Cavalo utilizando loops com variáveis múltiplas e condições avançadas.
-    // Inclua o uso de continue e break dentro dos loops.
-
+    char tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
+    
+    // Inicializando tabuleiro vazio
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
+            tabuleiro[i][j] = '.';
+        }
+    }
+    
+    // Testando a movimentação
+    printf("Movimentação do Bispo:\n");
+    moverBispo(tabuleiro, 4, 4, -1, -1);
+    moverBispo(tabuleiro, 4, 4, -1, 1);
+    moverBispo(tabuleiro, 4, 4, 1, -1);
+    moverBispo(tabuleiro, 4, 4, 1, 1);
+    exibirTabuleiro(tabuleiro);
+    
+    // Resetando tabuleiro
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++)
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
+            tabuleiro[i][j] = '.';
+    
+    printf("Movimentação da Torre:\n");
+    moverTorre(tabuleiro, 4, 4);
+    exibirTabuleiro(tabuleiro);
+    
+    // Resetando tabuleiro
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++)
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
+            tabuleiro[i][j] = '.';
+    
+    printf("Movimentação da Rainha:\n");
+    moverRainha(tabuleiro, 4, 4);
+    exibirTabuleiro(tabuleiro);
+    
+    // Resetando tabuleiro
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++)
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++)
+            tabuleiro[i][j] = '.';
+    
+    printf("Movimentação do Cavalo:\n");
+    moverCavalo(tabuleiro, 4, 4);
+    exibirTabuleiro(tabuleiro);
+    
     return 0;
 }
